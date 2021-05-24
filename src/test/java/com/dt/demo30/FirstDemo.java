@@ -1,5 +1,6 @@
 package com.dt.demo30;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.dt.demo30.entity.Info;
@@ -40,9 +41,10 @@ public class FirstDemo {
     //3.查询一条名称为王紫轩的数据
     @Test
     public void s2(){
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("name","ghr");
-        Info info =  infoMapper.selectOne(wrapper);
+        LambdaQueryWrapper<Info> lambdaWrapper =new QueryWrapper<Info>()
+                .lambda();
+        lambdaWrapper.eq(Info::getName,"ghr");
+        Info info =  infoMapper.selectOne(lambdaWrapper);
         System.out.println(info);
 
     }
@@ -50,56 +52,68 @@ public class FirstDemo {
     //1.查询前5条数据，、
     @Test
     public void s3(){
-       QueryWrapper<Info> wrapper = new QueryWrapper<>();
-       wrapper.le("id",8);
-      List<Info> list =  infoMapper.selectList(wrapper);
+        LambdaQueryWrapper<Info> lambdaWrapper =new QueryWrapper<Info>()
+                .lambda();
+       lambdaWrapper.le(Info::getId,8);
+      List<Info> list =  infoMapper.selectList(lambdaWrapper);
       list.forEach(System.out::println);
     }
 
     //查询名称中带h的数据
     @Test
     public void s4(){
-       QueryWrapper<Info> wrapper = new QueryWrapper<>();
-       wrapper.like("name","h");
-       List<Info> list =  infoMapper.selectList(wrapper);
+        LambdaQueryWrapper<Info> lambdaWrapper =new QueryWrapper<Info>()
+                .lambda();
+       lambdaWrapper.like(Info::getName,"h");
+       List<Info> list =  infoMapper.selectList(lambdaWrapper);
        list.forEach(System.out::println);
     }
 
     //查询名称为www或带y的数据
     @Test
     public void s5(){
-       QueryWrapper<Info> wrapper = new QueryWrapper<>();
-       wrapper.like("name","www").or().like("name","y");
-        List<Info> list =  infoMapper.selectList(wrapper);
+        LambdaQueryWrapper<Info> lambdaWrapper =new QueryWrapper<Info>()
+                .lambda();
+       lambdaWrapper.like(Info::getName,"www").or().like(Info::getName,"y");
+        List<Info> list =  infoMapper.selectList(lambdaWrapper);
         list.forEach(System.out::println);
     }
 
     //统计名称为www的数据条数
     @Test
     public void s6(){
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("name","www");
-        int c  =  infoMapper.selectCount(wrapper);
+       LambdaQueryWrapper<Info> lambdaWrapper =new QueryWrapper<Info>()
+               .lambda();
+               lambdaWrapper.eq(Info::getName,"www");
+               int c = infoMapper.selectCount(lambdaWrapper);
         System.out.println(c);
+    //    QueryWrapper<Info> wrapper = new QueryWrapper<>();
+     //   wrapper.eq("name","www");
+     //   int c  =  infoMapper.selectCount(wrapper);
+    //    System.out.println(c);
     }
 
     //将名称为ghr的数据替换其名称为ght
     @Test
     public void s7(){
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.eq("name","ghr");
+        LambdaQueryWrapper<Info> lambdaWrapper = new QueryWrapper<Info>()
+                .lambda();
+        lambdaWrapper.eq(Info::getName,"ghr");
         Info info =new Info();
         info.setName("ght");
-        infoMapper.update(info,wrapper);
+        infoMapper.update(info,lambdaWrapper);
     }
 
     //查询名称以 轩 字结尾的数据
     @Test
     public void s8(){
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.likeLeft("name","轩");
-        List<Info> list = infoMapper.selectList(wrapper);
-        list.forEach(System.out::println);
+        LambdaQueryWrapper<Info> lambdaWrapper = new QueryWrapper<Info>()
+                .lambda();
+                lambdaWrapper.likeLeft(Info::getName,"轩");
+      //  QueryWrapper<Info> wrapper = new QueryWrapper<>();
+     //   wrapper.likeLeft("name","轩");
+        List<Info> list = infoMapper.selectList(lambdaWrapper);
+       list.forEach(System.out::println);
 
     }
 
@@ -113,21 +127,23 @@ public class FirstDemo {
     @Test
     public void s10(){
       Info info =  infoMapper.selectById(15);
-      QueryWrapper<Info> wrapper = new QueryWrapper<>();
-      wrapper.eq("id",15);
+        LambdaQueryWrapper<Info> lambdaWrapper = new QueryWrapper<Info>()
+                .lambda();
+      lambdaWrapper.eq(Info::getId,15);
       Info info1 =new Info();
       info1.setName("wdk");
       info1.setAge(info.getAge()+1);
-      infoMapper.update(info1,wrapper);
+      infoMapper.update(info1,lambdaWrapper);
     }
 
     //2.查询名称为www的数据，按id倒序
     @Test
     public void s11() {
-        QueryWrapper<Info> wrapper = new QueryWrapper<>();
-        wrapper.like("name", "www");
-        wrapper.orderByDesc("id");
-        List<Info> list = infoMapper.selectList(wrapper);
+        LambdaQueryWrapper<Info> lambdaWrapper = new QueryWrapper<Info>()
+                .lambda();
+        lambdaWrapper.like(Info::getName, "www");
+        lambdaWrapper.orderByDesc(Info::getId);
+        List<Info> list = infoMapper.selectList(lambdaWrapper);
         list.forEach(System.out::println);
 
 
